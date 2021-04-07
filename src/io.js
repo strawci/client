@@ -50,7 +50,13 @@ module.exports = (client, serverURL) => {
         );
 
         const project = client.projects.get(projectID);
-        const actions = project.parser.getBranchActions(branch);
+        const actions = [
+            {
+                type: "bash",
+                arg: "cd " + project.directory,
+            },
+            ...project.parser.getBranchActions(branch),
+        ];
 
         client.interpreter
             .runActions(actions, (err, stdout, stderr) => {
